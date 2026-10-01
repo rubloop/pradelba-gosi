@@ -982,7 +982,7 @@ if(!STATIC){
   heat.style.left='0';heat.style.top='0';
 }
 
-Reveal.on('ready',e=>{ setTemp(e.currentSlide); enter(e.currentSlide); warmCover(e.currentSlide);
+Reveal.on('ready',e=>{ /* بعض متصفحات الجوال ما ترسم الشريحة أول فتح لين يتغير شي — نهزّها مرتين */ [400,1400].forEach(t=>setTimeout(()=>{ document.body.style.outline='0px solid transparent'; requestAnimationFrame(()=>document.body.style.outline=''); },t)); setTemp(e.currentSlide); enter(e.currentSlide); warmCover(e.currentSlide);
   if(STATIC) staticHeat(e.currentSlide); });
 function staticHeat(sec){ if(!STATIC) return; setTimeout(()=>sec.querySelectorAll('.stage').forEach(st=>heatUp(st)),250); }
 Reveal.on('slidechanged',e=>{ leave(e.previousSlide); setTemp(e.currentSlide); enter(e.currentSlide); warmCover(e.currentSlide); staticHeat(e.currentSlide); });
