@@ -950,21 +950,26 @@ function spawn(stage){
 }
 function burst(stage,count,still){
   const c=stage.querySelector('canvas.embers'); c.width=c.offsetWidth; c.height=c.offsetHeight;
-  stage._parts=stage._parts||[]; for(let i=0;i<count;i++){ const p=spawn(stage); if(still){p.life=Math.random()*p.max*.8; p.y-=p.life*Math.abs(p.vy);} stage._parts.push(p); }
+  stage._parts=stage._parts||[]; if(COARSE) count=Math.round(count*.55); for(let i=0;i<count;i++){ const p=spawn(stage); if(still){p.life=Math.random()*p.max*.8; p.y-=p.life*Math.abs(p.vy);} stage._parts.push(p); }
   if(still) drawParts(stage);
 }
 function drawParts(stage){
   const c=stage.querySelector('canvas.embers'), g=c.getContext('2d'); g.clearRect(0,0,c.width,c.height);
   g.globalCompositeOperation='lighter';
-  for(const p of stage._parts){ const t=p.life/p.max, a=Math.max(0,1-t)*.95;
-    const col=t<.4?`255,${200-t*150|0},90`:`255,${140-t*90|0},50`;
-    const gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.2); gr.addColorStop(0,`rgba(${col},${a})`); gr.addColorStop(1,`rgba(${col},0)`);
-    g.fillStyle=gr; g.beginPath(); g.arc(p.x,p.y,p.r*3.2,0,6.283); g.fill(); }
+  for(const p of stage._parts){ const t=p.life/p.max, s=p.r*3.2;
+    g.globalAlpha=Math.max(0,1-t)*.95; g.drawImage(EMB[Math.min(11,t*12|0)],p.x-s,p.y-s,2*s,2*s); }
+  g.globalAlpha=1;
 }
+/* ١٢ حبّة جمر جاهزة بألوانها (من الأصفر للأحمر) بدل تدرّج جديد لكل حبّة كل إطار */
+const EMB=Array.from({length:12},(_,i)=>{ const t=i/12, col=t<.4?`255,${200-t*150|0},90`:`255,${140-t*90|0},50`;
+  const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d');
+  const gr=g.createRadialGradient(32,32,0,32,32,32); gr.addColorStop(0,`rgba(${col},1)`); gr.addColorStop(1,`rgba(${col},0)`);
+  g.fillStyle=gr; g.fillRect(0,0,64,64); return c; });
+const EMAX=COARSE?30:55;
 function tick(){
   const cur=Reveal.getCurrentSlide(); const st=cur&&cur.querySelector('.stage.on');
   if(st&&!STATIC){ const ps=st._parts||(st._parts=[]);
-    if(ps.length<55 && Math.random()<.7) ps.push(spawn(st));
+    if(ps.length<EMAX && Math.random()<.7) ps.push(spawn(st));
     for(const p of ps){ p.life++; p.ph+=.05; p.x+=p.vx+Math.sin(p.ph)*.5; p.y+=p.vy; p.vy*=.995; }
     st._parts=ps.filter(p=>p.life<p.max); drawParts(st); }
   requestAnimationFrame(tick);
