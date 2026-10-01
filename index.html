@@ -466,7 +466,7 @@ body.static .chem-say{display:none}
 .stage .disc{position:absolute;width:640px;height:640px;border-radius:50%;
   background:radial-gradient(circle,rgba(var(--glow-rgb),.10) 0%,rgba(var(--glow-rgb),.04) 45%,transparent 70%);transition:all 1.2s}
 .stage.on .disc{background:radial-gradient(circle,rgba(255,170,70,.55) 0%,rgba(224,86,58,.28) 38%,transparent 70%);transform:scale(1.18)}
-.stage img.p{position:relative;max-height:720px;max-width:640px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));transition:filter 1.2s,transform 1.2s}
+.stage img.p{position:relative;max-height:720px;max-width:640px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));transition:transform 1.2s}
 .stage.on img.p{filter:drop-shadow(0 0 40px rgba(255,160,60,.55)) drop-shadow(0 30px 40px rgba(0,0,0,.4)) saturate(1.1)}
 .stage.on .prod{transform:translateY(-10px);transition:transform 1.2s}
 .stage .press{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;font-size:22px;color:rgba(var(--fg-rgb),.75);white-space:nowrap;transition:opacity .4s}
@@ -493,12 +493,12 @@ body.static .chem-say{display:none}
 
 /* ── الصقيع والجمر ── */
 .stage .prod{position:relative;line-height:0;z-index:1}
-.stage.on .prod{filter:url(#haze)}
+/* تموّج الحرارة (فلتر SVG متحرك) انشال: كان يضاعف تكلفة الرسم ٥ مرات ويعلّق الجوال */
 body.static .stage.on .prod{filter:none}
 .stage img.p{display:block}
 .stage:not(.on) img.p{filter:saturate(.35) brightness(.88) contrast(.95) drop-shadow(0 30px 40px rgba(0,0,0,.5))}
 .frost-clip{position:absolute;inset:0;pointer-events:none;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-.frost{position:absolute;inset:0;mix-blend-mode:screen;opacity:.92;
+.frost{position:absolute;inset:0;opacity:.8;
   background:
    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .09' numOctaves='2' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .93 0 0 0 0 1 0 0 0 1.4 -.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"),
@@ -575,7 +575,6 @@ body.clean .stage img.p,body.clean .stage.on img.p,body.clean .stage:not(.on) im
 <button data-t="maroon" title="عنابي كامل" style="background:linear-gradient(135deg,#3E0F1B 50%,#B02842 50%)"></button>
 <button data-t="coal" title="فحم وذهب" style="background:linear-gradient(135deg,#1C1E24 50%,#D9A441 50%)"></button>
 <button data-t="sand" title="رمل" style="background:linear-gradient(135deg,#E6ECF4 50%,#E7D5BF 50%)"></button></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="haze" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.035" numOctaves="2" seed="3" result="n"><animate attributeName="baseFrequency" dur="5s" values="0.008 0.035;0.011 0.05;0.008 0.035" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <div id="thermo" aria-hidden="true"><div class="fill"></div><div class="dot"></div></div>
 
 <div id="rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M3 9a9 9 0 0 1 4-6M21 15a9 9 0 0 1-4 6"/></svg>اقلب الجوال بالعرض عشان تشوف العرض كامل</div>
