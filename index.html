@@ -356,6 +356,8 @@ html,body,.reveal-viewport{height:100%;margin:0;background:var(--c3)!important;c
 #bg-cold{background:radial-gradient(120% 90% at 70% 20%, var(--c1) 0%, var(--c2) 35%, var(--c3) 100%);z-index:0}
 #bg-warm{background:radial-gradient(110% 90% at 30% 70%, var(--w1) 0%, var(--w2) 30%, var(--w3) 75%, var(--w4) 100%);opacity:var(--temp);transition:opacity 1.4s ease;z-index:0}
 #grain{z-index:1;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* بالجوال: طبقة الحبيبات بدمج «overlay» تمنع المتصفح يرسم الشريحة أول ما تفتح — نخليها طبقة عادية أخف */
+@media (hover:none),(max-width:1100px){#grain{mix-blend-mode:normal;opacity:.035}}
 .reveal{z-index:2}
 
 /* ── دفا اليد: توهّج يلحق المؤشر أو اللمسة ── */
