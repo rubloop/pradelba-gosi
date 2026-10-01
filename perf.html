@@ -509,12 +509,12 @@ body.static .stage.on .prod{filter:none}
 @media (hover:none){
  .stage img.p,.stage.on img.p,.stage:not(.on) img.p{filter:none}
  .prod .sh,.prod .gl,.prod .pc{display:block;position:absolute;pointer-events:none;max-width:none;max-height:none}
- .prod .pc{inset:0;width:100%;height:100%;transition:opacity 1.2s;will-change:opacity}
+ .prod .pc{inset:0;width:100%;height:100%;transition:opacity 1.2s}
  .stage.on .prod .pc{opacity:0}
- .prod .gl{opacity:0;transition:opacity 1.2s;will-change:opacity}
+ .prod .gl{opacity:0;transition:opacity 1.2s}
  .stage.on .prod .gl{opacity:1}
- .stage .prod,.stage .disc{will-change:transform}
- .frost-clip{will-change:opacity}
+ .frost-clip{transition:opacity .9s ease-in}
+ .stage.on .frost-clip{opacity:0;transition:opacity 1.3s ease-out}
 }
 body.clean .prod .sh,body.clean .prod .gl,body.clean .prod .pc{display:none!important}
 .stage canvas.embers{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
@@ -926,10 +926,10 @@ function heatUp(stage,ev){
   stage._pt={x,y};
   const w=f.offsetWidth,h=f.offsetHeight, max=Math.hypot(w,h)+80;
   const sec=stage.closest('section'), n=sec.querySelector('.ring .n'), v=sec.querySelector('.ring circle.val');
-  if(STATIC||REDUCED){ frostAt(stage,x,y,max); if(COARSE) f.parentNode.style.opacity=0; if(n){n.textContent='8';v.style.strokeDashoffset='0';} if(STATIC) burst(stage,90,true); return; }
+  if(STATIC||REDUCED){ frostAt(stage,x,y,max);  if(n){n.textContent='8';v.style.strokeDashoffset='0';} if(STATIC) burst(stage,90,true); return; }
   if(navigator.vibrate) try{navigator.vibrate([14,50,22]);}catch(e){}
   const o={r:0}; stage._melt&&stage._melt.kill();
-  stage._melt=COARSE?gsap.to(f.parentNode,{opacity:0,duration:1.3,ease:'power2.out'}):gsap.to(o,{r:max,duration:1.5,ease:'power2.inOut',onUpdate:()=>frostAt(stage,x,y,o.r)});
+  stage._melt=COARSE?null:gsap.to(o,{r:max,duration:1.5,ease:'power2.inOut',onUpdate:()=>frostAt(stage,x,y,o.r)});
   burst(stage,70);
   if(n){ v.style.strokeDashoffset='0'; const c={x:0}; gsap.to(c,{x:8,duration:1.8,delay:.3,ease:'power2.out',onUpdate:()=>n.textContent=Math.round(c.x)}); }
 }
@@ -937,7 +937,7 @@ function cool(stage){
   stage.classList.remove('on'); stage._parts=[];
   const f=stage.querySelector('.frost'); const p=stage._pt||{x:50,y:50};
   const o={r:Math.hypot(f.offsetWidth,f.offsetHeight)+80}; stage._melt&&stage._melt.kill();
-  stage._melt=COARSE?gsap.to(f.parentNode,{opacity:1,duration:REDUCED?0:.9,ease:'power2.in'}):gsap.to(o,{r:0,duration:REDUCED?0:.9,ease:'power2.in',onUpdate:()=>frostAt(stage,p.x,p.y,o.r)});
+  stage._melt=COARSE?null:gsap.to(o,{r:0,duration:REDUCED?0:.9,ease:'power2.in',onUpdate:()=>frostAt(stage,p.x,p.y,o.r)});
   const sec=stage.closest('section'), n=sec.querySelector('.ring .n'), v=sec.querySelector('.ring circle.val');
   if(n){ n.textContent='0'; v.style.strokeDashoffset='326.7'; }
 }
