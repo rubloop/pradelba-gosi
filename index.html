@@ -946,10 +946,10 @@ function spawn(stage){
   const c=stage.querySelector('canvas.embers'), pr=stage.querySelector('.prod');
   const cw=c.width, sb=stage.getBoundingClientRect(), pb=pr.getBoundingClientRect(), k=cw/sb.width;
   const x=(pb.left-sb.left+Math.random()*pb.width)*k, y=(pb.top-sb.top+pb.height*(.15+Math.random()*.7))*k;
-  return {x,y,vx:(Math.random()-.5)*.6,vy:-(1+Math.random()*2.2),r:1.4+Math.random()*3.2,life:0,max:70+Math.random()*90,ph:Math.random()*6};
+  return {x,y,vx:(Math.random()-.5)*.6*ES,vy:-(1+Math.random()*2.2)*ES,r:(1.4+Math.random()*3.2)*ES,life:0,max:70+Math.random()*90,ph:Math.random()*6};
 }
 function burst(stage,count,still){
-  const c=stage.querySelector('canvas.embers'); c.width=c.offsetWidth; c.height=c.offsetHeight;
+  const c=stage.querySelector('canvas.embers'); c.width=c.offsetWidth*ES|0; c.height=c.offsetHeight*ES|0;
   stage._parts=stage._parts||[]; if(COARSE) count=Math.round(count*.55); for(let i=0;i<count;i++){ const p=spawn(stage); if(still){p.life=Math.random()*p.max*.8; p.y-=p.life*Math.abs(p.vy);} stage._parts.push(p); }
   if(still) drawParts(stage);
 }
@@ -965,12 +965,12 @@ const EMB=Array.from({length:12},(_,i)=>{ const t=i/12, col=t<.4?`255,${200-t*15
   const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d');
   const gr=g.createRadialGradient(32,32,0,32,32,32); gr.addColorStop(0,`rgba(${col},1)`); gr.addColorStop(1,`rgba(${col},0)`);
   g.fillStyle=gr; g.fillRect(0,0,64,64); return c; });
-const EMAX=COARSE?30:55;
+const EMAX=COARSE?30:55, ES=COARSE?.5:1, ST=COARSE?2:1; let efr=0;
 function tick(){
   const cur=Reveal.getCurrentSlide(); const st=cur&&cur.querySelector('.stage.on');
-  if(st&&!STATIC){ const ps=st._parts||(st._parts=[]);
-    if(ps.length<EMAX && Math.random()<.7) ps.push(spawn(st));
-    for(const p of ps){ p.life++; p.ph+=.05; p.x+=p.vx+Math.sin(p.ph)*.5; p.y+=p.vy; p.vy*=.995; }
+  if(st&&!STATIC&&(++efr%ST===0)){ const ps=st._parts||(st._parts=[]);
+    for(let k=0;k<ST;k++) if(ps.length<EMAX && Math.random()<.7) ps.push(spawn(st));
+    for(const p of ps){ p.life+=ST; p.ph+=.05*ST; p.x+=(p.vx+Math.sin(p.ph)*.5*ES)*ST; p.y+=p.vy*ST; p.vy*=ST>1?.990:.995; }
     st._parts=ps.filter(p=>p.life<p.max); drawParts(st); }
   requestAnimationFrame(tick);
 }
